@@ -3,6 +3,7 @@ package team.closetalk.ootd.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import team.closetalk.ootd.dto.OotdArticleImagesDto;
 
 @Data
 @Entity
