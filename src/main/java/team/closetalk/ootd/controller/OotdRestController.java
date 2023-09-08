@@ -2,6 +2,7 @@ package team.closetalk.ootd.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.realm.AuthenticatedUserRealm;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
@@ -30,6 +31,16 @@ public class OotdRestController {
     ) {
         OotdArticleDto ootdArticle = ootdArticleService.readOotdOne(articleId);
         return ootdArticle;
+    }
+
+    @GetMapping("/search")
+    public Page<OotdArticleDto> searchOotdArticle(@RequestParam("type") String type
+            , @RequestParam("keyword") String keyword
+            , @RequestParam(value = "page", defaultValue = "0") Integer page
+            , @RequestParam(value = "limit", defaultValue = "12") Integer limit
+
+    ){
+        return ootdArticleService.searchOotdArticle(type, keyword, page, limit);
     }
 
     @PostMapping()

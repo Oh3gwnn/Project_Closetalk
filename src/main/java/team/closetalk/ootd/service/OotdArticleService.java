@@ -120,6 +120,24 @@ public class OotdArticleService {
         else throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
+    public Page<OotdArticleDto> searchOotdArticle(String type, String keyword, Integer pageNum, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by("id").descending());
+        Page<OotdArticleEntity> ootdEntityPage;
+
+        if(type.equals("작성자")){
+            UserEntity userEntity = userRepository.findByNickname(keyword).get();
+            ootdEntityPage = ootdArticleRepository.findAllByUserEntity(pageable, userEntity);
+        } else if(type.equals("해시태그")){
+            ootdEntityPage = ootdArticleRepository.findAllByHashtagContaining(pageable, keyword);
+
+        } else {
+            ootdEntityPage = ootdArticleRepository.findAllByContentContaining(pageable, keyword);
+        }
+
+        return ootdEntityPage.map(OotdArticleDto :: fromEntityForList);
+
+    }
+
 
     public OotdArticleDto updateOotdArticle(Authentication authentication, Long articleId, OotdArticleDto dto){
         //작성자 정보 일치 여부 확인
